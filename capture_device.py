@@ -5,23 +5,27 @@ mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 
 hands = mp_hands.Hands()
-cap = cv2.VideoCapture(0)
+
+pre_editado_path = 'abanar.mp4'
+capture_video = cv2.VideoCapture(pre_editado_path)
 
 while True:
-    ret, frame = cap.read()
-    if not ret:
+    ret_preditado, frame_preditado = capture_video.read()
+
+    if not ret_preditado:
         break
-    
-    image_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    results = hands.process(image_rgb)
 
-    if results.multi_hand_landmarks:
-        for hand_landmarks in results.multi_hand_landmarks:
-            mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+    image_rgb_preditado = cv2.cvtColor(frame_preditado, cv2.COLOR_BGR2RGB)
+    result_preditado = hands.process(image_rgb_preditado)
 
-    cv2.imshow('Frame', frame)
+    if result_preditado.multi_hand_landmarks:
+        for hand_landmarks in result_preditado.multi_hand_landmarks:
+            mp_drawing.draw_landmarks(frame_preditado, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+
+    cv2.imshow('Vídeo Pré-Editado', frame_preditado)
+
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-cap.release()
+capture_video.release()
 cv2.destroyAllWindows()
